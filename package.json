@@ -1,0 +1,43 @@
+{
+  "name": "kafka-lag-streamer",
+  "version": "1.0.0",
+  "description": "A service that reads __consumer_offsets and translates it to stream of lags",
+  "main": "src/index.js",
+  "scripts": {
+    "dev-setup": "docker-compose up"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/mocha": "^9.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "mocha": "^9.0.3",
+    "prettier": "^2.3.2"
+  },
+  "dependencies": {
+    "awilix": "^6.0.0",
+    "kafkajs": "^1.15.0",
+    "lodash": "^4.17.21",
+    "properties-reader": "^2.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielsinai/kafka-lag-streamer.git"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danielsinai/kafka-lag-streamer/issues"
+  },
+  "homepage": "https://github.com/danielsinai/kafka-lag-streamer/#readme",
+  "engines": {
+    "node": ">=10.6.0"
+  },
+  "author": "danielsinai"
+}

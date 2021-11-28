@@ -1,0 +1,14 @@
+### input
+kafka.input.consumer.offsets.topic.name=__consumer_offsets
+kafka.input.bootstrap.servers=localhost:9094
+kafka.input.consumer.group.name=kafka.lag-streamer
+kafka.input.bootstrap.servers.timeout=30000
+
+### output
+kafka.output.enabled=true
+kafka.output.consumer.lags.topic.name=consumer.lags
+kafka.output.bootstrap.servers=localhost:9094
+kafka.output.bootstrap.servers.timeout=30000
+
+### logging
+kafkajs.logLevel=WARN

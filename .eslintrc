@@ -1,0 +1,40 @@
+{
+  "extends": [
+    "standard",
+    "prettier",
+    "plugin:node/recommended"
+  ],
+  "plugins": [
+    "prettier",
+    "standard"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "rules": {
+    "linebreak-style": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "standard/no-callback-literal": "off",
+    "no-unexpected-multiline": "off",
+    "no-return-await": "off",
+    "node/no-deprecated-api": "off",
+    "node/no-missing-require": [
+      "error",
+      {
+        "allowModules": [
+          "testHelpers"
+        ]
+      }
+    ],
+    "no-process-exit": "off",
+    "node/shebang": "off",
+    "camelcase": [
+      "error"
+    ]
+  }
+}
