@@ -1,4 +1,3 @@
-
 const { createContainer, asClass, asValue, Lifetime } = require("awilix");
 const services = require("../services");
 const subscribers = require("../subscribers");
@@ -15,6 +14,7 @@ const loadContainer = ({ config }) => {
     kafkaLagProducerService: asClass(services.KafkaLagProducer, { lifetime: Lifetime.SINGLETON }),
     recordDecoderService: asClass(services.RecordDecoder, { lifetime: Lifetime.SINGLETON }),
     offsetToLagCalculatorService: asClass(services.OffsetToLagCalculator, { lifetime: Lifetime.SINGLETON }),
+    partitionsMetadataService: asClass(services.PartitionsMetadata, { lifetime: Lifetime.SINGLETON }),
     recordMonitorSubscriber: asClass(subscribers.RecordMonitor, { lifetime: Lifetime.SINGLETON }),
     commitOffsetMonitorSubscriber: asClass(subscribers.CommitOffsetMonitor, { lifetime: Lifetime.SINGLETON }),
     lagMonitorSubscriber: asClass(subscribers.LagMonitor, { lifetime: Lifetime.SINGLETON }),

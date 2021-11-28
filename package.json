@@ -24,6 +24,7 @@
     "awilix": "^6.0.0",
     "kafkajs": "^1.15.0",
     "lodash": "^4.17.21",
+    "node-cache": "^5.1.2",
     "properties-reader": "^2.2.0"
   },
   "repository": {
