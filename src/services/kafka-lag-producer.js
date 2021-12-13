@@ -7,7 +7,7 @@ class KafkaLagProducer {
     this.send = this.send.bind(this);
   }
 
-  async send({ group, lag, partition, originalOffset }) {
+  async send({ group, lag, partition }) {
     if (!this._isConnected) {
       await this._producer.connect();
       this._isConnected = true;
