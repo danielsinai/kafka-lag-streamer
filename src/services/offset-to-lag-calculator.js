@@ -10,16 +10,20 @@ class OffsetToLagCalculator extends EventEmitter {
   }
 
   async calculate({ commitOffset }) {
-    const partitionsMetadata = await this._partitionsMetadataService.get(commitOffset);
-    const isMarkedToReset = commitOffset.offset == -1 || commitOffset.offset == -2;
-    const lag = !isMarkedToReset ? partitionsMetadata.offset - commitOffset.offset : commitOffset.offset;
+    try {
+      const partitionsMetadata = await this._partitionsMetadataService.get(commitOffset);
+      const isMarkedToReset = commitOffset.offset == -1 || commitOffset.offset == -2;
+      const lag = !isMarkedToReset ? partitionsMetadata.offset - commitOffset.offset : commitOffset.offset;
 
-    this.emit(constants.events.NEW_LAG, {
-      group: commitOffset.group,
-      topic: commitOffset.topic,
-      partition: commitOffset.partition,
-      lag
-    });
+      this.emit(constants.events.NEW_LAG, {
+        group: commitOffset.group,
+        topic: commitOffset.topic,
+        partition: commitOffset.partition,
+        lag
+      });
+    } catch (e) {
+      this._logger.error(`Could not calculate the offsets of the topic's partition of ${JSON.stringify(commitOffset)}, because ${e.message}`);
+    }
   }
 }
 

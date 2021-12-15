@@ -2,8 +2,9 @@ const constants = require("../constants");
 const { EventEmitter } = require("events");
 
 class RecordDecoder extends EventEmitter {
-  constructor() {
+  constructor({ logger }) {
     super();
+    this._logger = logger;
   }
 
   _readString(buffer, startOffset) {
@@ -77,7 +78,10 @@ class RecordDecoder extends EventEmitter {
     const keyBuf = record.key;
     const valueBuf = record.value;
 
-    if (!valueBuf || !keyBuf) return; //TODO: add warn
+    if (!valueBuf || !keyBuf) {
+      this._logger.warn('Key or buffer of the input topic record are empty!')
+      return;
+    }
 
     const keyVer = keyBuf.readInt16BE();
     switch (keyVer) {
@@ -108,12 +112,14 @@ class RecordDecoder extends EventEmitter {
         this.emit(constants.events.GROUP_METADATA, {
           group,
           metadataHeader,
-          memberCount,
+          memberCount
         });
         return;
       }
       default: {
-        //Todo: add log
+        this._logger.warn(`A message have been consumed, but could not be decoded 
+        - check your kafka version compatibility or your input topic configuration`
+        );
       }
 
     }
