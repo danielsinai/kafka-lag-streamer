@@ -94,7 +94,6 @@ class RecordDecoder extends EventEmitter {
           group: group.decoded,
           topic: topic.decoded,
           offset: Number(BigInt(offsetValue.offset)),
-          originalOffset: record.offset,
           partition
         });
         return;
@@ -110,7 +109,6 @@ class RecordDecoder extends EventEmitter {
           group,
           metadataHeader,
           memberCount,
-          originalOffset: record.offset
         });
         return;
       }
