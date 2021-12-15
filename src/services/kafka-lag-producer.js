@@ -17,7 +17,7 @@ class KafkaLagProducer {
     await this._producer.send({
         topic: this._consumerLagsTopic,
         messages: [
-          { key: `${group}`, value: JSON.stringify({ group, topic, partition, lag }) }
+          { key: `${group}${topic}${partition}`, value: JSON.stringify({ group, topic, partition, lag }) }
         ]
       }
     );

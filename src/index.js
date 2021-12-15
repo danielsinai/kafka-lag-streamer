@@ -10,8 +10,6 @@ const configPath = configPathInput || path.join(__dirname, `..`, `config`, `lag-
 
   loaders.loadSubscribers(container);
 
-  await loaders.loadIdleConsumerGroupsUpdater(container);
-
   const kafkaOffsetConsumerService = container.resolve("kafkaOffsetConsumerService");
   kafkaOffsetConsumerService.run();
 })();

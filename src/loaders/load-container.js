@@ -23,9 +23,11 @@ const loadContainer = async ({ config }) => {
     offsetToLagCalculatorService: asClass(services.OffsetToLagCalculator, { lifetime: Lifetime.SINGLETON }),
     partitionsMetadataService: asClass(services.PartitionsMetadata, { lifetime: Lifetime.SINGLETON }),
     idleConsumerGroupsUpdaterService: asClass(services.IdleConsumerGroupsUpdater, { lifetime: Lifetime.SINGLETON }),
+    loadBalancerResponsibilitiesExposerService: asClass(services.LoadBalancerResponsibilitiesExposer, { lifetime: Lifetime.SINGLETON }),
     recordMonitorSubscriber: asClass(subscribers.RecordMonitor, { lifetime: Lifetime.SINGLETON }),
     commitOffsetMonitorSubscriber: asClass(subscribers.CommitOffsetMonitor, { lifetime: Lifetime.SINGLETON }),
     lagMonitorSubscriber: asClass(subscribers.LagMonitor, { lifetime: Lifetime.SINGLETON }),
+    groupLoadBalancerSubscriber: asClass(subscribers.GroupsLoadBalancer, { lifetime: Lifetime.SINGLETON }),
     //Using here asValue and not asClass because awilix cant handle unused config options
     kafkaAdmin: asValue(kafkaAdmin),
     inputKafka: asValue(inputKafka),

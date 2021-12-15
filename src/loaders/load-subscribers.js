@@ -1,5 +1,6 @@
 const loadSubscribers = (container) => {
   container.resolve("recordMonitorSubscriber");
+  container.resolve("groupLoadBalancerSubscriber");
   container.resolve("commitOffsetMonitorSubscriber");
   container.resolve("lagMonitorSubscriber");
 };

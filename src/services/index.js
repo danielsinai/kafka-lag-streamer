@@ -4,6 +4,7 @@ const RecordDecoder = require("./record-decoder");
 const OffsetToLagCalculator = require("./offset-to-lag-calculator");
 const PartitionsMetadata = require("./partitions-metadata");
 const IdleConsumerGroupsUpdater = require("./idle-consumer-groups-updater");
+const LoadBalancerResponsibilitiesExposer = require("./load-balancer-responsibilities-exposer");
 
 const services = {
   KafkaOffsetConsumer,
@@ -12,6 +13,7 @@ const services = {
   OffsetToLagCalculator,
   PartitionsMetadata,
   IdleConsumerGroupsUpdater,
+  LoadBalancerResponsibilitiesExposer
 };
 
 module.exports = services;
