@@ -1,10 +1,11 @@
 const constants = require("../constants");
 
 class LagMonitor {
-  constructor({ kafkaLagProducerService, offsetToLagCalculatorService, config }) {
+  constructor({ kafkaLagProducerService, offsetToLagCalculatorService, logger, config }) {
     this._offsetToLagCalculatorService = offsetToLagCalculatorService;
     this._kafkaLagProducerService = kafkaLagProducerService;
     this._enabledOutput = config["kafka.output.enabled"];
+    this._logger = logger;
 
     this._output = this._output.bind(this);
 
@@ -13,6 +14,8 @@ class LagMonitor {
 
   async _output(data) {
     if (this._enabledOutput === "true") {
+      this._logger.trace(`Lag founded starting produce process now ${JSON.stringify(data)}`);
+
       await this._kafkaLagProducerService.send(data);
     }
   }

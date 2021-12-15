@@ -1,4 +1,5 @@
 const { createContainer, asClass, asValue, Lifetime } = require("awilix");
+const loadLogger = require("../logger");
 const services = require("../services");
 const subscribers = require("../subscribers");
 const { Kafka } = require("kafkajs");
@@ -8,6 +9,7 @@ const loadContainer = async ({ config }) => {
     injectionMode: "PROXY"
   });
 
+  const logger = loadLogger(config);
   const inputKafka = new Kafka({
     brokers: config["kafka.input.bootstrap.servers"],
     connectionTimeout: config["kafka.input.bootstrap.servers.timeout"],
@@ -36,6 +38,7 @@ const loadContainer = async ({ config }) => {
       connectionTimeout: config["kafka.output.bootstrap.servers.timeout"],
       logLevel: config["kafkajs.logLevel"]
     })),
+    logger: asValue(logger),
     config: asValue(config)
   });
   return container;
