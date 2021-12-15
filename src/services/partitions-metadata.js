@@ -11,18 +11,24 @@ class PartitionsMetadata {
   }
 
   async _fetchPartitionMetadata({ topic }) {
-    if (!this._pendingPromises[topic]) {
-      this._logger.info(`Creating a new fetch topic ${topic} partition offsets request`);
-      this._pendingPromises[topic] = this._kafkaAdmin.fetchTopicOffsets(topic);
-      return await this._pendingPromises[topic];
+    try {
+      if (!this._pendingPromises[topic]) {
+        this._logger.info(`Creating a new fetch topic ${topic} partition offsets request`);
+        this._pendingPromises[topic] = this._kafkaAdmin.fetchTopicOffsets(topic);
+        return await this._pendingPromises[topic];
+      }
+
+      this._logger.info(`There is already a fetch topic ${topic} partitions offsets request in progress waiting for it to finish`);
+      const resolved = await this._pendingPromises[topic];
+      const { topic: currentResolvePromise, ...newPendingPromises } = this._pendingPromises;
+      this._pendingPromises = newPendingPromises;
+
+      return resolved;
+    } catch (e) {
+      this._logger.error(`Can not fetch partition offsets of ${topic}`)
+      throw e;
     }
 
-    this._logger.info(`There is already a fetch topic ${topic} partitions offsets request in progress waiting for it to finish`);
-    const resolved = await this._pendingPromises[topic];
-    const { topic: currentResolvePromise, ...newPendingPromises } = this._pendingPromises;
-    this._pendingPromises = newPendingPromises;
-
-    return resolved;
   }
 
   async get(data) {

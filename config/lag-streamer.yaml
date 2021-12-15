@@ -11,6 +11,5 @@ kafka.output.bootstrap.servers=localhost:9094
 kafka.output.bootstrap.servers.timeout=30000
 
 ### logging
-kafkajs.logLevel=WARN
 kafka.lag.streamer.log.level=trace
 kafka.lag.streamer.log.path=kafka-streamer-logs.log

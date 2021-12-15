@@ -2,7 +2,8 @@ const { createContainer, asClass, asValue, Lifetime } = require("awilix");
 const loadLogger = require("../logger");
 const services = require("../services");
 const subscribers = require("../subscribers");
-const { Kafka } = require("kafkajs");
+const kafkaJsLogCreator = require("../logger/kafkajs-log-creator");
+const { Kafka, logLevel } = require("kafkajs");
 
 const loadContainer = async ({ config }) => {
   const container = createContainer({
@@ -13,7 +14,8 @@ const loadContainer = async ({ config }) => {
   const inputKafka = new Kafka({
     brokers: config["kafka.input.bootstrap.servers"],
     connectionTimeout: config["kafka.input.bootstrap.servers.timeout"],
-    logLevel: config["kafkajs.logLevel"]
+    logLevel: config["kafka.lag.streamer.log.level"],
+    logCreator: kafkaJsLogCreator(logger)
   });
 
   const kafkaAdmin = await inputKafka.admin();
@@ -36,7 +38,8 @@ const loadContainer = async ({ config }) => {
     outputKafka: asValue(new Kafka({
       brokers: config["kafka.output.bootstrap.servers"],
       connectionTimeout: config["kafka.output.bootstrap.servers.timeout"],
-      logLevel: config["kafkajs.logLevel"]
+      logLevel: config["kafka.lag.streamer.log.level"],
+      logCreator: kafkaJsLogCreator(logger)
     })),
     logger: asValue(logger),
     config: asValue(config)
