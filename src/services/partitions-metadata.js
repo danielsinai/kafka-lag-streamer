@@ -5,7 +5,10 @@ const _ = require("lodash");
 class PartitionsMetadata {
   constructor({ kafkaAdmin, logger }) {
     this._kafkaAdmin = kafkaAdmin;
-    this._cache = new NodeCache({ stdTTL: 10, checkperiod: 11 });
+    this._cache = new NodeCache({
+      stdTTL: 10,
+      checkperiod: 11
+    });
     this._logger = logger;
     this._pendingPromises = {};
   }
@@ -15,7 +18,9 @@ class PartitionsMetadata {
       if (!this._pendingPromises[topic]) {
         this._logger.info(`Creating a new fetch topic ${topic} partition offsets request`);
         this._pendingPromises[topic] = this._kafkaAdmin.fetchTopicOffsets(topic);
-        return await this._pendingPromises[topic];
+        const { [topic]: thisTopicPromise, ...newPendingPromises } = this._pendingPromises;
+        this._pendingPromises = newPendingPromises;
+        return await thisTopicPromise;
       }
 
       this._logger.info(`There is already a fetch topic ${topic} partitions offsets request in progress waiting for it to finish`);
@@ -25,7 +30,7 @@ class PartitionsMetadata {
 
       return resolved;
     } catch (e) {
-      this._logger.error(`Can not fetch partition offsets of ${topic}`)
+      this._logger.error(`Can not fetch partition offsets of ${topic}`);
       throw e;
     }
 

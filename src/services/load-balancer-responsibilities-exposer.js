@@ -29,7 +29,7 @@ class LoadBalancerResponsibilitiesExposer extends EventEmitter {
       deleteOnExpire: false,
       checkperiod: 11
     });
-    this._responsiblites.on("expire", (k, v) => {
+    this._responsiblites.on("expired", (k, v) => {
       this.emit(constants.events.RESPONSIBILITY_EXPIRED, v);
     });
   }

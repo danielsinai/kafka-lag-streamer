@@ -3,9 +3,10 @@ const constants = require("../constants");
 const { EventEmitter } = require("events");
 
 class OffsetToLagCalculator extends EventEmitter {
-  constructor({ inputKafka, partitionsMetadataService }) {
+  constructor({ inputKafka, partitionsMetadataService, logger }) {
     super();
     this._kafkaAdmin = inputKafka.admin();
+    this._logger = logger;
     this._partitionsMetadataService = partitionsMetadataService;
   }
 
