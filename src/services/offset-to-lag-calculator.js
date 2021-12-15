@@ -6,8 +6,6 @@ class OffsetToLagCalculator extends EventEmitter {
   constructor({ inputKafka, partitionsMetadataService }) {
     super();
     this._kafkaAdmin = inputKafka.admin();
-    // this object will assure we dont accidentally produce a latest offset of
-    // the one already produce to prevent falsy lags
     this._partitionsMetadataService = partitionsMetadataService;
   }
 
