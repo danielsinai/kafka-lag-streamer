@@ -15,11 +15,11 @@ class GroupsLoadBalancer {
     this._logger = logger;
 
     this._resetResponsibilities = this._resetResponsibilities.bind(this);
-    this._addResponsibility = this._addResponsibility.bind(this);
+    this._takeOrPostponeResponsibility = this._takeOrPostponeResponsibility.bind(this);
     this._updateResponsibility = this._updateResponsibility.bind(this);
 
     this._kafkaOffsetConsumerService.on(constants.events.INPUT_TOPIC_REBALANCED, this._resetResponsibilities);
-    this._recordDecoderService.on(constants.events.COMMIT_OFFSET, this._addResponsibility);
+    this._recordDecoderService.on(constants.events.COMMIT_OFFSET, this._takeOrPostponeResponsibility);
     this._loadBalancerResponsibilitiesExposerService.on(constants.events.RESPONSIBILITY_EXPIRED, this._updateResponsibility);
   }
 
@@ -30,15 +30,15 @@ class GroupsLoadBalancer {
     this._loadBalancerResponsibilitiesExposerService.resetResponsibilities();
   }
 
-  _addResponsibility(record) {
-    this._loadBalancerResponsibilitiesExposerService.upsertResponsibility(record);
+  _takeOrPostponeResponsibility(record) {
+    this._loadBalancerResponsibilitiesExposerService.takeOrPostponeResponsibility(record);
   }
 
   async _updateResponsibility(value) {
     this._logger.info(`Idle consumer group ${value.group} lag is being updated`);
 
     const newResponsibility = await this._idleConsumerGroupsUpdaterService.update(value);
-    this._addResponsibility(newResponsibility);
+    this._takeOrPostponeResponsibility(newResponsibility);
   }
 }
 

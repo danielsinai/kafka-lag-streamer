@@ -11,14 +11,14 @@ class LoadBalancerResponsibilitiesExposer extends EventEmitter {
     this.resetResponsibilities();
   }
 
-  upsertResponsibility(responsibilityPayload) {
+  takeOrPostponeResponsibility(responsibilityPayload) {
     const key = utils.buildResponsibilityKey(responsibilityPayload);
 
     if (!this._responsiblites.has(key)) {
       this._logger.info(`This lag-streamer instance is taking responsibility on ${responsibilityPayload.group} ${responsibilityPayload.topic} ${responsibilityPayload.partition}`);
-
-      this._responsiblites.set(utils.buildResponsibilityKey(responsibilityPayload), responsibilityPayload);
     }
+
+    this._responsiblites.set(utils.buildResponsibilityKey(responsibilityPayload), responsibilityPayload);
   }
 
   resetResponsibilities() {
