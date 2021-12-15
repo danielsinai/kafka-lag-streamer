@@ -7,7 +7,7 @@ class KafkaLagProducer {
     this.send = this.send.bind(this);
   }
 
-  async send({ group, lag, partition }) {
+  async send({ group, lag, topic, partition }) {
     if (!this._isConnected) {
       await this._producer.connect();
       this._isConnected = true;
@@ -17,7 +17,7 @@ class KafkaLagProducer {
     await this._producer.send({
         topic: this._consumerLagsTopic,
         messages: [
-          { key: `${group}`, value: JSON.stringify({ group, lag, partition }) }
+          { key: `${group}`, value: JSON.stringify({ group, topic, partition, lag }) }
         ]
       }
     );

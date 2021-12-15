@@ -1,18 +1,37 @@
 const NodeCache = require("node-cache");
 const { EventEmitter } = require("events");
 const utils = require("../utils");
+const _ = require("lodash");
 
 class IdleConsumerGroupsUpdater extends EventEmitter {
-  constructor({ kafkaAdmin, offsetToLagCalculator }) {
+  constructor({ kafkaAdmin, offsetToLagCalculatorService }) {
     super();
     this._kafkaAdmin = kafkaAdmin;
-    this._offsetToLagCalculator = offsetToLagCalculator;
-    this._cache = new NodeCache({ stdTTL: 30, checkperiod: 11 });
+    this._offsetToLagCalculatorService = offsetToLagCalculatorService;
+    this._cache = new NodeCache({ stdTTL: 10, checkperiod: 11 });
   }
 
   async initGroupsCache() {
     const consumerGroups = await this._kafkaAdmin.listGroups();
-    const consumerGroupsObj = consumerGroups.map((group) => )
+    const topics = await this._kafkaAdmin.listTopics();
+
+    // mapping all consumer group to topics that exists
+    const consumerGroupsObj =
+      await Promise.all(
+        consumerGroups.groups.map(async ({ groupId }) => {
+          return await Promise.all(
+            topics.map(async topic => ({
+              key: utils.buildConsumerGroupCacheKey({ group: groupId, topic }),
+              val: {
+                offset: await this._kafkaAdmin.fetchOffsets({ groupId, topic }),
+                topic,
+                group: groupId
+              }
+            })));
+        })
+      );
+
+    this._cache.mset(_.flatten(consumerGroupsObj));
   }
 
   addConsumerGroupsToCache() {
@@ -30,13 +49,17 @@ class IdleConsumerGroupsUpdater extends EventEmitter {
 
   listenToExpiration() {
     this._cache.on("del", async (key, value) => {
-      const groupInformation = await this._kafkaAdmin.fetchOffsets(key);
+      const { group: groupId, topic } = value;
+      const groupInformation = await this._kafkaAdmin.fetchOffsets({ groupId, topic });
 
       await Promise.all(
-        groupInformation.map(({ offset }) =>
-          this._offsetToLagCalculator.calculate({
-            offset,
-            ...value
+        groupInformation.map(({ offset, partition }) =>
+          this._offsetToLagCalculatorService.calculate({
+            commitOffset: {
+              ...value,
+              offset,
+              partition
+            }
           })
         )
       );

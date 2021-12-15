@@ -22,7 +22,7 @@ const loadContainer = async ({ config }) => {
     recordDecoderService: asClass(services.RecordDecoder, { lifetime: Lifetime.SINGLETON }),
     offsetToLagCalculatorService: asClass(services.OffsetToLagCalculator, { lifetime: Lifetime.SINGLETON }),
     partitionsMetadataService: asClass(services.PartitionsMetadata, { lifetime: Lifetime.SINGLETON }),
-    consumerGroupsLagSampler: asClass(services.IdleConsumerGroupsUpdater, { lifetime: Lifetime.SINGLETON }),
+    idleConsumerGroupsUpdaterService: asClass(services.IdleConsumerGroupsUpdater, { lifetime: Lifetime.SINGLETON }),
     recordMonitorSubscriber: asClass(subscribers.RecordMonitor, { lifetime: Lifetime.SINGLETON }),
     commitOffsetMonitorSubscriber: asClass(subscribers.CommitOffsetMonitor, { lifetime: Lifetime.SINGLETON }),
     lagMonitorSubscriber: asClass(subscribers.LagMonitor, { lifetime: Lifetime.SINGLETON }),
