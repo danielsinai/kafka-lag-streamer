@@ -5,9 +5,11 @@ const constants = require("../constants");
 const { EventEmitter } = require("events");
 
 class LoadBalancerResponsibilitiesExposer extends EventEmitter {
-  constructor({ logger }) {
+  constructor({ logger, config }) {
     super();
     this._logger = logger;
+    this._updateIntervalMs = config["idle.group.update.interval.ms"];
+    this._updateCheckIntervalMs = config["idle.group.update.check.period.ms"];
     this.resetResponsibilities();
   }
 
@@ -16,19 +18,20 @@ class LoadBalancerResponsibilitiesExposer extends EventEmitter {
 
     if (!this._responsiblites.has(key)) {
       this._logger.info(`This lag-streamer instance is taking responsibility on ${responsibilityPayload.group} ${responsibilityPayload.topic} ${responsibilityPayload.partition}`);
+      this._responsiblites.set(utils.buildResponsibilityKey(responsibilityPayload), responsibilityPayload);
+    } else {
     }
-
-    this._responsiblites.set(utils.buildResponsibilityKey(responsibilityPayload), responsibilityPayload);
   }
 
   resetResponsibilities() {
     this._responsiblites && this._responsiblites.removeAllListeners();
 
     this._responsiblites = new NodeCache({
-      stdTTL: 10,
-      deleteOnExpire: false,
-      checkperiod: 11
+      stdTTL: this._updateIntervalMs / 1000,
+      checkperiod: this._updateCheckIntervalMs / 1000,
+      deleteOnExpire: false
     });
+
     this._responsiblites.on("expired", (k, v) => {
       this.emit(constants.events.RESPONSIBILITY_EXPIRED, v);
     });
