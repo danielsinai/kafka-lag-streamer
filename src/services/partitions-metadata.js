@@ -3,11 +3,11 @@ const utils = require("../utils");
 const _ = require("lodash");
 
 class PartitionsMetadata {
-  constructor({ kafkaAdmin, logger }) {
+  constructor({ kafkaAdmin, logger, config }) {
     this._kafkaAdmin = kafkaAdmin;
     this._cache = new NodeCache({
-      stdTTL: 10,
-      checkperiod: 11
+      stdTTL: config["partition.metadata.update.interval.ms"] / 1000,
+      checkperiod: config["partition.metadata.update.check.period.ms"] / 1000
     });
     this._logger = logger;
     this._pendingPromises = {};

@@ -37,8 +37,7 @@ class GroupsLoadBalancer {
   async _updateResponsibility(value) {
     this._logger.info(`Idle consumer group ${value.group} lag is being updated`);
 
-    const newResponsibility = await this._idleConsumerGroupsUpdaterService.update(value);
-    this._takeOrPostponeResponsibility(newResponsibility);
+    await this._idleConsumerGroupsUpdaterService.update(value);
   }
 }
 
