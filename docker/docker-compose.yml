@@ -30,6 +30,7 @@ services:
     command: "bash -c 'echo Waiting for Kafka to be ready... && \
                cub kafka-ready -b kafka:9092 1 30 && \
                kafka-topics --create --topic consumer.lags --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181 && \
+               kafka-topics --create --topic group.metadata --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181 && \
                kafka-topics --create --topic temp.topic --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181 && \
                kafka-console-producer --broker-list kafka:9092 -topic temp.topic < /data/message.json && \
                kafka-console-consumer --bootstrap-server kafka:9092 -topic temp.topic --from-beginning true --group groupy --max-messages 1'"

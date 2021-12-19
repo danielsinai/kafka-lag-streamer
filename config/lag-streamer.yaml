@@ -5,10 +5,16 @@ kafka.input.consumer.group.name=kafka.lag-streamer
 kafka.input.bootstrap.servers.timeout=30000
 
 ### outputs
-kafka.output.enabled=true
+  ### consumer lags output
+kafka.output.consumer.lags.enabled=true
 kafka.output.consumer.lags.topic.name=consumer.lags
-kafka.output.bootstrap.servers=localhost:9094
-kafka.output.bootstrap.servers.timeout=30000
+kafka.output.consumer.lags.bootstrap.servers=localhost:9094
+kafka.output.consumer.lags.bootstrap.servers.timeout=30000
+  ### group metadata output
+kafka.output.group.metadata.enabled=true
+kafka.output.group.metadata.topic.name=group.metadata
+kafka.output.group.metadata.bootstrap.servers=localhost:9094
+kafka.output.group.metadata.bootstrap.servers.timeout=30000
 
 ### logging
 kafka.lag.streamer.log.level=info

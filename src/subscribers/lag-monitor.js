@@ -4,7 +4,7 @@ class LagMonitor {
   constructor({ kafkaLagProducerService, offsetToLagCalculatorService, logger, config }) {
     this._offsetToLagCalculatorService = offsetToLagCalculatorService;
     this._kafkaLagProducerService = kafkaLagProducerService;
-    this._enabledOutput = config["kafka.output.enabled"];
+    this._enabledOutput = config["kafka.output.consumer.lags.enabled"];
     this._logger = logger;
 
     this._output = this._output.bind(this);
