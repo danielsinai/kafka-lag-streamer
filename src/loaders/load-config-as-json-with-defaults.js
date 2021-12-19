@@ -12,12 +12,15 @@ const loadConfigAsJsonWithDefaults = ({ configPath }) => {
   config["kafka.input.consumer.offsets.topic.name"] = config["kafka.input.consumer.offsets.topic.name"] || '__consumer_offsets'
   config["kafka.input.bootstrap.servers.timeout"] = config["kafka.input.bootstrap.servers.timeout"] || 10000
 
-  config["kafka.output.bootstrap.servers"] = (config["kafka.output.bootstrap.servers"] || "localhost:9092").split(",");
-  config["kafka.output.consumer.offsets.topic.name"] = config["kafka.output.consumer.lags.topic.name"] || '__consumer_offsets'
-  config["kafka.output.bootstrap.servers.timeout"] = config["kafka.output.bootstrap.servers.timeout"] || 10000
-  config["kafka.output.enabled"] = config["kafka.output.enabled"] || true
+  config["kafka.output.consumer.lags.bootstrap.servers"] = (config["kafka.output.consumer.lags.bootstrap.servers"] || "localhost:9092").split(",");
+  config["kafka.output.consumer.lags.topic.name"] = config["kafka.output.consumer.lags.topic.name"] || 'consumer.lags'
+  config["kafka.output.consumer.lags.bootstrap.servers.timeout"] = config["kafka.output.consumer.lags.bootstrap.servers.timeout"] || 10000
+  config["kafka.output.consumer.lags.enabled"] = config["kafka.output.consumer.lags.enabled"] || true
 
-  config["kafkajs.logLevel"] = logLevel[config["kafkajs.logLevel"]] || logLevel['DEBUG']
+  config["kafka.output.group.metadata.bootstrap.servers"] = (config["kafka.output.group.metadata.bootstrap.servers"] || "localhost:9092").split(",");
+  config["kafka.output.group.metadata.topic.name"] = config["kafka.output.group.metadata.topic.name"] || 'group.metadata'
+  config["kafka.output.group.metadata.bootstrap.servers.timeout"] = config["kafka.output.group.metadata.bootstrap.servers.timeout"] || 10000
+  config["kafka.output.group.metadata.enabled"] = config["kafka.output.group.metadata.enabled"] || true
 
   return config;
 };

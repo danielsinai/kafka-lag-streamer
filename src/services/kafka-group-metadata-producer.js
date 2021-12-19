@@ -1,13 +1,13 @@
-class KafkaLagProducer {
-  constructor({ config, consumerLagsKafkaOutput, logger }) {
-    this._consumerLagsTopic = config["kafka.output.consumer.lags.topic.name"];
-    this._producer = consumerLagsKafkaOutput.producer();
+class KafkaGroupMetadataProducer {
+  constructor({ config, groupMetadataKafkaOutput, logger }) {
+    this._consumerLagsTopic = config["kafka.output.group.metadata.topic.name"];
+    this._producer = groupMetadataKafkaOutput.producer();
     this._isConnected = false;
     this._logger = logger;
     this.send = this.send.bind(this);
   }
 
-  async send({ group, lag, topic, partition }) {
+  async send(data) {
     if (!this._isConnected) {
       await this._producer.connect();
       this._isConnected = true;
@@ -17,7 +17,7 @@ class KafkaLagProducer {
       await this._producer.send({
           topic: this._consumerLagsTopic,
           messages: [
-            { key: `${group}${topic}${partition}`, value: JSON.stringify({ group, topic, partition, lag }) }
+            { key: null, value: JSON.stringify(data) }
           ]
         }
       );
@@ -27,4 +27,4 @@ class KafkaLagProducer {
   }
 }
 
-module.exports = KafkaLagProducer;
+module.exports = KafkaGroupMetadataProducer;
