@@ -1,0 +1,29 @@
+### input
+kafka.input.consumer.offsets.topic.name=__consumer_offsets
+kafka.input.bootstrap.servers=kafka:9092
+kafka.input.consumer.group.name=kafka.lag-streamer
+kafka.input.bootstrap.servers.timeout=30000
+
+### outputs
+  ### consumer lags output
+kafka.output.consumer.lags.enabled=true
+kafka.output.consumer.lags.topic.name=consumer.lags
+kafka.output.consumer.lags.bootstrap.servers=kafka:9092
+kafka.output.consumer.lags.bootstrap.servers.timeout=30000
+  ### group metadata output
+kafka.output.group.metadata.enabled=true
+kafka.output.group.metadata.topic.name=group.metadata
+kafka.output.group.metadata.bootstrap.servers=kafka:9092
+kafka.output.group.metadata.bootstrap.servers.timeout=30000
+
+### logging
+kafka.lag.streamer.log.level=info
+kafka.lag.streamer.log.path=kafka-streamer-logs.log
+
+### partition metadata
+partition.metadata.update.interval.ms=30000
+partition.metadata.update.check.period.ms=31000
+
+### idle group config
+idle.group.update.interval.ms=10000
+idle.group.update.check.period.ms=11000

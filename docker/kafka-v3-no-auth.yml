@@ -10,6 +10,7 @@ services:
       ZOOKEEPER_SYNC_LIMIT: 2
   kafka:
     image: confluentinc/cp-kafka
+    container_name: kafka
     ports:
       - 9094:9094
     depends_on:
@@ -22,9 +23,10 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
   kafka-init-topics:
+    container_name: kafka-init-topics
     image: confluentinc/cp-kafka:5.2.4
     volumes:
-      - ./message.json:/data/message.json
+      - ./resources/message.json:/data/message.json
     depends_on:
       - kafka
     command: "bash -c 'echo Waiting for Kafka to be ready... && \
