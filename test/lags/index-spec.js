@@ -1,21 +1,24 @@
-const Pulsar = require("../../src/client");
 const config = require("../config");
 const assert = require("assert");
-const { createLogger, LEVELS } = require("../../src/logger");
-const defaultLogger = require("../../src/logger/default");
-const { jwt, discoveryServers, topic } = config;
+const { Kafka } = require('kafkajs')
+
+const { brokers, topicToTestLagsOn, group, consumerLagsTopic, groupMetadataTopic } = config;
 
 describe("lags tests", function() {
   describe("writing messages and reading and checking output topic ", function() {
     it("should output the correct lag", async function() {
-      const pulsar = new Pulsar({
-        discoveryServers,
-        jwt,
-        logger: createLogger({ logLevel: LEVELS.TRACE, logCreator: defaultLogger })
-      });
+      const producer = (new Kafka({ brokers })).producer();
+      const consumer = (new Kafka({ brokers })).consumer({ groupId: group });
 
       try {
-        await pulsar.connect({ topic });
+        await consumer.connect()
+        await consumer.subscribe({ topic: consumerLagsTopic, fromBeginning: true})
+        const promise = new Promise((resolve, reject) => {
+          consumer.run({ autoCommit: false, eachMessage: ({message}) => console.log(message.value.toString())});
+        })
+        await producer.connect();
+        await producer.send({topic: topicToTestLagsOn, messages: [{key: null, value: 'testing'}]});
+        await promise;
         assert.ok(true);
       } catch (e) {
         console.log(e);
