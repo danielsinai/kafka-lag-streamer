@@ -4,7 +4,7 @@
   "description": "A service that reads __consumer_offsets and translates it to stream of lags",
   "main": "src/index.js",
   "scripts": {
-    "pretest": "./scripts/setup-env-by-file.sh ./docker/all-in-one-kafka-v3-no-auth.yml env.compose",
+    "pretest": "./scripts/setup-env-by-file.sh ./docker/all-in-one-kafka-v3-no-auth.yml .env.compose",
     "test": "mocha --timeout 10000 test/**/*.js",
     "test-setup": "docker-compose up"
   },
